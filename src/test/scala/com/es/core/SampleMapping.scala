@@ -28,6 +28,21 @@ trait SampleMapping extends ESMapping {
       Right(hit.sourceAsString.parseJson.convertTo[Article])
     }
   }
+  implicit object AuthorHitAs extends HitReader[Author] {
+    override def read(hit: Hit): Either[Throwable, Author] = {
+      Right(hit.sourceAsString.parseJson.convertTo[Author])
+    }
+  }
+  implicit object BookHitAs extends HitReader[Book] {
+    override def read(hit: Hit): Either[Throwable, Book] = {
+      Right(hit.sourceAsString.parseJson.convertTo[Book])
+    }
+  }
+  implicit object PublisherHitAs extends HitReader[Publisher] {
+    override def read(hit: Hit): Either[Throwable, Publisher] = {
+      Right(hit.sourceAsString.parseJson.convertTo[Publisher])
+    }
+  }
 
   override val indexName: String = "myindex"
 

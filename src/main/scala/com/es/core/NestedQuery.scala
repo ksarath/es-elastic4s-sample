@@ -6,25 +6,28 @@ import com.sksamuel.elastic4s.searches.queries.QueryDefinition
 case class SearchFilter(field: String, value: String, fieldType: String = "normal", queryType: String = "term")
 
 trait NestedQuery {
-  def generateQuery(filters: Seq[SearchFilter]): Seq[QueryDefinition] = {
-    val queries = filters groupBy(_.field) map {
-      case (_, filterGroup) =>
-        boolQuery() should
-          filterGroup.foldLeft(Seq[QueryDefinition]()) {
-            case (queyList, filter) =>
-              val query = filter.fieldType match {
-                case "normal" => getQuery(filter)
-                case "nested" => getNestedQuery(filter, filter.field)
-                case "nestedText" if filter.queryType == "term" => getNestedMultiFieldQuery(filter)
-                case "nestedText" => getNestedQuery(filter, filter.field)
-                case x => throw new RuntimeException(s"Unknown field type: $x for field: $filter")
-              }
-
-              queyList :+ query
-          }
+  def generateFilterQueries(filters: Seq[SearchFilter]): Seq[QueryDefinition] = {
+    val queries = filters groupBy(_.field.toLowerCase) map {
+      case (_, filterGroup) => generateFilterQuery(filterGroup)
     }
 
     queries toSeq
+  }
+
+  protected def generateFilterQuery(filters: Seq[SearchFilter]): QueryDefinition = {
+    boolQuery() should
+      filters.foldLeft(Seq[QueryDefinition]()) {
+        case (queyList, filter) =>
+          val query = filter.fieldType match {
+            case "normal" => getQuery(filter)
+            case "nested" => getNestedQuery(filter, filter.field)
+            case "nestedText" if filter.queryType == "term" => getNestedMultiFieldQuery(filter)
+            case "nestedText" => getNestedQuery(filter, filter.field)
+            case x => throw new RuntimeException(s"Unknown field type: $x for field: $filter")
+          }
+
+          queyList :+ query
+      }
   }
 
   private def getNestedQuery(filter: SearchFilter, fieldPath: String): QueryDefinition = {
