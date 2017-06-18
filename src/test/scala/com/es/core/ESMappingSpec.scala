@@ -14,6 +14,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class ESMappingSpec extends TestKit(ActorSystem("testsystem", TestConfig.config))
   with WordSpecLike with Matchers with BeforeAndAfterAll with ElasticSugar {
 
+  object SM extends SampleMapping
+
   override def beforeAll {
     val status = client.execute {
       clusterHealth()
@@ -30,9 +32,18 @@ class ESMappingSpec extends TestKit(ActorSystem("testsystem", TestConfig.config)
   implicit private val esClient = client
 
   private def createIndexAndMapping() = {
-    val response = SampleMapping.applyIndexAndMapping()
+    val response = SM.applyIndexAndMapping()
     response.onFailure {
       case _ => fail("failed to create index and mapping")
+    }
+
+    response map {
+      result =>
+        result.isAcknowledged shouldBe true
+
+        client execute getMapping(SM.indexName / SM.mappingName) map (
+           _.mappings.isEmpty shouldBe false
+        )
     }
 
     Await.result(response, 10 seconds)
@@ -44,17 +55,5 @@ class ESMappingSpec extends TestKit(ActorSystem("testsystem", TestConfig.config)
         createIndexAndMapping()
       }
     }
-
-    /*"nested filter query" in {
-      within(20 seconds) {
-        createIndexAndMapping()
-
-        esClient.execute {
-          bulk(
-
-          ).refresh(RefreshPolicy.Immediate)
-        }.await.errors should be false
-      }
-    }*/
   }
 }
