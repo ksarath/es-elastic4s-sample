@@ -1,13 +1,13 @@
 package com.es.core
 
-import com.sksamuel.elastic4s.ElasticDsl.{boolQuery, matchQuery, nestedQuery, termQuery, wildcardQuery}
+import com.sksamuel.elastic4s.ElasticDsl.{ boolQuery, matchQuery, nestedQuery, termQuery, wildcardQuery }
 import com.sksamuel.elastic4s.searches.queries.QueryDefinition
 
 case class SearchFilter(field: String, value: String, fieldType: String = "normal", queryType: String = "term")
 
 trait NestedQuery {
   def generateFilterQueries(filters: Seq[SearchFilter]): Seq[QueryDefinition] = {
-    val queries = filters groupBy(_.field.toLowerCase) map {
+    val queries = filters groupBy (_.field.toLowerCase) map {
       case (_, filterGroup) => generateFilterQuery(filterGroup)
     }
 

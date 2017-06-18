@@ -5,14 +5,14 @@ import akka.testkit.TestKit
 import com.sksamuel.elastic4s.testkit.ElasticSugar
 import config.TestConfig
 import org.elasticsearch.cluster.health.ClusterHealthStatus
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ESMappingSpec extends TestKit(ActorSystem("testsystem", TestConfig.config))
-  with WordSpecLike with Matchers with BeforeAndAfterAll with ElasticSugar {
+    with WordSpecLike with Matchers with BeforeAndAfterAll with ElasticSugar {
 
   object SM extends SampleMapping
 
@@ -42,7 +42,7 @@ class ESMappingSpec extends TestKit(ActorSystem("testsystem", TestConfig.config)
         result.isAcknowledged shouldBe true
 
         client execute getMapping(SM.indexName / SM.mappingName) map (
-           _.mappings.isEmpty shouldBe false
+          _.mappings.isEmpty shouldBe false
         )
     }
 

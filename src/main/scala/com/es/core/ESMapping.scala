@@ -2,7 +2,7 @@ package com.es.core
 
 import com.sksamuel.elastic4s.ElasticDsl._
 import com.sksamuel.elastic4s.TcpClient
-import com.sksamuel.elastic4s.analyzers.{CustomNormalizerDefinition, LowercaseTokenFilter}
+import com.sksamuel.elastic4s.analyzers.{ CustomNormalizerDefinition, LowercaseTokenFilter }
 import com.sksamuel.elastic4s.mappings.PutMappingDefinition
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse
@@ -21,8 +21,8 @@ trait ESMapping {
   def applyIndexAndMapping()(implicit elasticClient: TcpClient): Future[PutMappingResponse] = {
     elasticClient execute indexExists(indexName) flatMap {
       response =>
-        if(! response.isExists) {
-          createESIndex flatMap(_ => createESMapping)
+        if (!response.isExists) {
+          createESIndex flatMap (_ => createESMapping)
         } else {
           createESMapping
         }

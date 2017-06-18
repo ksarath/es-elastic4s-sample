@@ -5,14 +5,14 @@ import akka.testkit.TestKit
 import com.sksamuel.elastic4s.testkit.ElasticSugar
 import config.TestConfig
 import org.elasticsearch.cluster.health.ClusterHealthStatus
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class NestedQueryTest extends TestKit(ActorSystem("testsystem", TestConfig.config))
-  with WordSpecLike with Matchers with BeforeAndAfterAll with ElasticSugar {
+    with WordSpecLike with Matchers with BeforeAndAfterAll with ElasticSugar {
 
   object SM extends SampleMapping with NestedQuery
   import SM.ArticleHitAs
@@ -72,12 +72,12 @@ class NestedQueryTest extends TestKit(ActorSystem("testsystem", TestConfig.confi
         //println(esClient.show(queryDef))
 
         val result = Await.result(client execute queryDef, 20 seconds)
-        val articles = result.hits.toList map(_.to[Article])
+        val articles = result.hits.toList map (_.to[Article])
         articles.size shouldBe 2
 
-        val articleIds = articles map(_.id)
-        articleIds find(_ == "id 1") shouldBe Some("id 1")
-        articleIds find(_ == "id 2") shouldBe Some("id 2")
+        val articleIds = articles map (_.id)
+        articleIds find (_ == "id 1") shouldBe Some("id 1")
+        articleIds find (_ == "id 2") shouldBe Some("id 2")
       }
     }
 
@@ -94,7 +94,7 @@ class NestedQueryTest extends TestKit(ActorSystem("testsystem", TestConfig.confi
         //println(esClient.show(queryDef))
 
         val result = Await.result(client execute queryDef, 20 seconds)
-        val articles = result.hits.toList map(_.to[Article])
+        val articles = result.hits.toList map (_.to[Article])
         articles.size shouldBe 0
       }
     }

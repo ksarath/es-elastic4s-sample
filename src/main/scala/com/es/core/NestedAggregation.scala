@@ -1,12 +1,12 @@
 package com.es.core
 
-import com.sksamuel.elastic4s.ElasticDsl.{fieldSort, filterAgg, nestedAggregation, termsAggregation, topHitsAggregation}
-import com.sksamuel.elastic4s.searches.{RichSearchHit, RichSearchResponse}
-import com.sksamuel.elastic4s.searches.aggs.{AggregationDefinition, FilterAggregationDefinition, NestedAggregationDefinition}
-import org.elasticsearch.search.aggregations.{Aggregation, Aggregations}
+import com.sksamuel.elastic4s.ElasticDsl.{ fieldSort, filterAgg, nestedAggregation, termsAggregation, topHitsAggregation }
+import com.sksamuel.elastic4s.searches.{ RichSearchHit, RichSearchResponse }
+import com.sksamuel.elastic4s.searches.aggs.{ AggregationDefinition, FilterAggregationDefinition, NestedAggregationDefinition }
+import org.elasticsearch.search.aggregations.{ Aggregation, Aggregations }
 import org.elasticsearch.search.aggregations.bucket.filter.InternalFilter
 import org.elasticsearch.search.aggregations.bucket.nested.InternalNested
-import org.elasticsearch.search.aggregations.bucket.terms.{StringTerms, Terms}
+import org.elasticsearch.search.aggregations.bucket.terms.{ StringTerms, Terms }
 import org.elasticsearch.search.aggregations.metrics.tophits.InternalTopHits
 import org.elasticsearch.search.sort.SortOrder
 
@@ -76,7 +76,7 @@ trait NestedAggregation {
   }
 
   private def getNestedAggregationFilters(filters: Seq[SearchFilter]): Seq[FilterAggregationDefinition] = {
-    val queries = filters groupBy(_.field.toLowerCase) map {
+    val queries = filters groupBy (_.field.toLowerCase) map {
       case (key, filterGroup) => filterAgg(s"filter$key", generateFilterQuery(filterGroup))
     }
 

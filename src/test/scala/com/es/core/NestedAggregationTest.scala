@@ -5,14 +5,14 @@ import akka.testkit.TestKit
 import com.sksamuel.elastic4s.testkit.ElasticSugar
 import config.TestConfig
 import org.elasticsearch.cluster.health.ClusterHealthStatus
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class NestedAggregationTest extends TestKit(ActorSystem("testsystem", TestConfig.config))
-  with WordSpecLike with Matchers with BeforeAndAfterAll with ElasticSugar {
+    with WordSpecLike with Matchers with BeforeAndAfterAll with ElasticSugar {
 
   object SM extends SampleMapping with NestedQuery with NestedAggregation
   import SM.AuthorHitAs
@@ -44,7 +44,7 @@ class NestedAggregationTest extends TestKit(ActorSystem("testsystem", TestConfig
 
         client execute getMapping(SM.indexName / SM.mappingName) map (
           _.mappings.isEmpty shouldBe false
-          )
+        )
     }
 
     Await.result(response, 10 seconds)
@@ -71,7 +71,7 @@ class NestedAggregationTest extends TestKit(ActorSystem("testsystem", TestConfig
         //println(esClient.show(queryDef))
 
         val result = Await.result(client execute queryDef, 20 seconds)
-        val authors = SM.getAggregationResponse(result) map(_.to[Author])
+        val authors = SM.getAggregationResponse(result) map (_.to[Author])
         authors.size shouldBe 1
         authors(0).id shouldBe "aid 3"
       }
@@ -92,7 +92,7 @@ class NestedAggregationTest extends TestKit(ActorSystem("testsystem", TestConfig
         //println(esClient.show(queryDef))
 
         val result = Await.result(client execute queryDef, 20 seconds)
-        val authors = SM.getAggregationResponse(result) map(_.to[Author])
+        val authors = SM.getAggregationResponse(result) map (_.to[Author])
         authors.size shouldBe 0
       }
     }

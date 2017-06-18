@@ -1,8 +1,8 @@
 package com.es.core
 
-import com.sksamuel.elastic4s.ElasticDsl.{nestedField, _}
+import com.sksamuel.elastic4s.ElasticDsl.{ nestedField, _ }
 import com.sksamuel.elastic4s.bulk.RichBulkResponse
-import com.sksamuel.elastic4s.{Hit, HitReader, Indexable, TcpClient}
+import com.sksamuel.elastic4s.{ Hit, HitReader, Indexable, TcpClient }
 import com.sksamuel.elastic4s.mappings.PutMappingDefinition
 import spray.json._
 import spray.json.DefaultJsonProtocol._
@@ -10,7 +10,7 @@ import spray.json.DefaultJsonProtocol._
 import scala.concurrent.Future
 
 private[core] case class Publisher(id: String, name: String)
-private[core] case class Book(id:String, name: String, publishers: Seq[Publisher] = Nil)
+private[core] case class Book(id: String, name: String, publishers: Seq[Publisher] = Nil)
 private[core] case class Author(id: String, name: String, books: Seq[Book] = Nil)
 private[core] case class Article(id: String, title: String, tags: Option[String] = None, authors: Seq[Author] = Nil)
 
